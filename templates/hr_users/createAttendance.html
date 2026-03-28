@@ -1,0 +1,134 @@
+{% include "headers/header.html" %} {% load static %}
+<div class="wrapper">
+  <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img
+      class="animation__shake"
+      src="{% static 'js/dist/img/AdminLTELogo.png' %}"
+      alt="AdminLTELogo"
+      height="60"
+      width="60"
+    />
+  </div>
+  <!-- Navbar -->
+  {% include "headers/nav.html" %}
+  <!-- /.navbar -->
+  {% include "headers/sidebar.html" %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><b>Create New Attendance</b></h1>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">
+                {% if request.user.groups.all.0.name == 'HR' %}
+                    <a href="{% url 'hr.dashboard' %}" >
+                {% else %}
+                    <a href="{% url 'employee.dashboard' %}">
+                {% endif %}
+                Home</a></li>
+              <li class="breadcrumb-item active">Create Attendance</li>
+            </ol>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-10">
+            <!-- /.card -->
+            <!-- Horizontal Form -->
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Attendance Details</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form class="form-horizontal" autocomplete="off" method="post" action="{% url 'hr.save_attendance' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-body">
+                  {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-danger">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Employee Name</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="empName">
+                            <option value="">Select Employee</option>
+                            {% for emp in employeeList %}
+                                <option value="{{ emp.id }}">{{ emp.emp_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div> 
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Date </label>
+                    <div class="col-sm-10">
+                      <input type="date" class="form-control"   id="attendance_date" placeholder="" name="attendance_date" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Punch In Time </label>
+                    <div class="col-sm-10">
+                      <input type="time" class="form-control"   id="attendance_punch_in" placeholder="Employee User Name" name="attendance_punch_in" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Punch Out Time</label>
+                    <div class="col-sm-10">
+                      <input type="time" class="form-control"   id="attendance_punch_out" placeholder="Employee Password" name="attendance_punch_out" autocomplete="off" />
+                    </div>
+                </div>
+                {% if request.user.groups.all.0.name == 'HR' %}
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Approval Status</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="status">
+                           <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                 {% endif %}
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary btn-sm btn-flat mr-2"> Submit</button>
+                    <a href="{% url 'hr.employee_list' %}" type="submit" class="btn btn-default btn-sm btn-flat">Cancel</a>
+                </div>
+                <!-- /.card-footer -->
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- ./wrapper -->
+  {% include "headers/footer.html" %}
+</div>

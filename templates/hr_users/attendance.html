@@ -1,0 +1,143 @@
+{% include "headers/header.html" %} {% load static %}
+<div class="wrapper">
+  <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img
+      class="animation__shake"
+      src="{% static 'js/dist/img/AdminLTELogo.png' %}"
+      alt="AdminLTELogo"
+      height="60"
+      width="60"
+    />
+  </div>
+  <!-- Navbar -->
+  {% include "headers/nav.html" %}
+  <!-- /.navbar -->
+  {% include "headers/sidebar.html" %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><b>Attendance List</b></h1>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">
+                {% if request.user.groups.all.0.name == 'HR' %}
+                    <a href="{% url 'hr.dashboard' %}" >
+                {% else %}
+                    <a href="{% url 'employee.dashboard' %}">
+                {% endif %}
+                Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Main row -->
+        <div class="row">
+          <!-- Left col -->
+          <section class="col-lg-12 connectedSortable">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Attendance Details</h3>
+                  <a href="{% url 'hr.create_attendance' %}" class="btn btn-success btn-sm ml-auto btn-flat float-right"> Create Attendance</a>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-success">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Employee Name</th>
+                        <th>Date</th>
+                        <th>Check in</th>
+                        <th>Check out</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for attendance in attendanceList %}
+                      <tr>    
+                        <td> {{ forloop.counter }} </td>
+                        <td> {{ attendance.employee }}</td>
+                        <td> {{ attendance.date }} </td>
+                        <td> {{ attendance.punch_in }}  </td>
+                        <td> {{ attendance.punch_out }} </td>
+                        <td> 
+                          {% if attendance.approval_status == 'Approved' %}
+                          <span class="badge bg-success"> {{ attendance.approval_status }} </span> 
+                          {% endif %}                          
+                          {% if attendance.approval_status == 'Pending' %}
+                          <span class="badge bg-info"> {{ attendance.approval_status }} </span>
+                          {% endif %}                          
+                          {% if attendance.approval_status == 'Rejected' %}
+                          <span class="badge bg-danger"> {{ attendance.approval_status }} </span> 
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}  
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item">
+                      <a class="page-link" href="#">«</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">»</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.card -->
+          </section>
+          <!-- /.Left col -->
+          <!-- right col (We are only adding the ID to make the widgets sortable)-->
+
+          <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- ./wrapper -->
+  {% include "headers/footer.html" %}
+</div>

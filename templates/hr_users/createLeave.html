@@ -1,0 +1,152 @@
+{% include "headers/header.html" %} {% load static %}
+<div class="wrapper">
+  <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img
+      class="animation__shake"
+      src="{% static 'js/dist/img/AdminLTELogo.png' %}"
+      alt="AdminLTELogo"
+      height="60"
+      width="60"
+    />
+  </div>
+  <!-- Navbar -->
+  {% include "headers/nav.html" %}
+  <!-- /.navbar -->
+  {% include "headers/sidebar.html" %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><b>Create New Leave</b></h1>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">
+                {% if request.user.groups.all.0.name == 'HR' %}
+                    <a href="{% url 'hr.dashboard' %}" >
+                {% else %}
+                    <a href="{% url 'employee.dashboard' %}">
+                {% endif %}
+                Home</a></li>
+              <li class="breadcrumb-item active">Create Leave</li>
+            </ol>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-10">
+            <!-- /.card -->
+            <!-- Horizontal Form -->
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Leave Details</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form class="form-horizontal" autocomplete="off" method="post" action="{% url 'hr.save_leaves' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-body">
+                {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Employee Name</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="empName">
+                            <option value="">Select Employee</option>
+                            {% for emp in employeeList %}
+                                <option value="{{ emp.id }}">{{ emp.emp_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>  
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Leave Type</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="leave_type">
+                            <option value=""> Select leave type</option>
+                            <option value="C"> Casual Leave</option>
+                            <option value="S"> Sick Leave</option>
+                            <option value="E"> Earned/Annual Leave</option>
+                            <option value="M"> Maternity/Paternity Leave</option>
+                        </select>
+                    </div>
+                </div> 
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Start Date </label>
+                    <div class="col-sm-10">
+                      <input type="date" class="form-control"   id="leave_start_date" placeholder="" name="leave_start_date" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">End date</label>
+                    <div class="col-sm-10">
+                      <input type="date" class="form-control"   id="leave_end_date" placeholder="Employee Password" name="leave_end_date" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Number of days</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control"   id="leave_days" placeholder="Number of days" name="leave_days" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Reason</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control"   id="leave_reason" placeholder="Reason" name="leave_reason" autocomplete="off" />
+                    </div>
+                </div>
+                {% if request.user.groups.all.0.name == 'HR' %}
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Approval Status</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="status">
+                           <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary btn-sm btn-flat mr-2"> Submit</button>
+                    <a href="{% url 'hr.leaves' %}" type="submit" class="btn btn-default btn-sm btn-flat">Cancel</a>
+                </div>
+                <!-- /.card-footer -->
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- ./wrapper -->
+  {% include "headers/footer.html" %}
+</div>
