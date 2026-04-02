@@ -25,22 +25,28 @@ def dashboard(request):
         return render(request, 'employee/dashboard.html',userDet)
     else:
         return redirect('/')
-        
+    
+@login_required(login_url='/')        
 def myProfile(request):
       if request.user.is_authenticated and request.user.is_superuser == False:
          return render(request, 'employee/myprofile.html')
       else:
         return redirect('/')
+      
+@login_required(login_url='/')      
 def attendance(request):
     if request.user.is_authenticated and request.user.is_superuser == False:
       return HttpResponse("Employeeattendance")
     else:
         return redirect('/')
+@login_required(login_url='/')    
 def leaves(request):
     if request.user.is_authenticated and request.user.is_superuser == False:
       return HttpResponse("Employeeleaves")
     else:
         return redirect('/')
+    
+@login_required(login_url='/')   
 def salarySlip(request):
     if request.user.is_authenticated and request.user.is_superuser == False:
       return HttpResponse("Employee salary_slip")

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User, Group
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -24,6 +25,7 @@ def user_login(request):
         elif request.user.groups.filter(name='Employee').exists():
             return redirect('/employee/dashboard/')
         else:
+            messages.error(request, "Please login..!")
             return redirect('/')
     
     if request.method == "POST":
@@ -44,10 +46,13 @@ def user_login(request):
                 return redirect('/employee/dashboard/')
 
             else:
+                messages.error(request, "Invalid Username or Password..!")
                 return redirect('/')
         else:
-            return redirect('user_logout')
+            messages.error(request, "Invalid Username or Password..!")
+            return redirect('/')
 
 def user_logout(request):
     logout(request)
+    messages.success(request, "Logout Successfully...!")
     return redirect('/')

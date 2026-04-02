@@ -126,6 +126,7 @@ def employeeUpdate(request, id):
     messages.success(request, "Update successfully ✅")
     return redirect('hr.employee_list')
 
+@login_required(login_url='/')
 def attendance(request):
    attendanceList = Attendance.objects.all()
    return render(request, 'hr_users/attendance.html' , {
@@ -177,6 +178,7 @@ def saveAttendance(request):
     messages.success(request, "Saved successfully ✅")
     return redirect('hr.employee_attendance')
 
+@login_required(login_url='/')
 def leaves(request):
     if request.user.groups.filter(name='Employee').exists():
         leavesList = Leaves.objects.filter(employee__user=request.user)
@@ -195,7 +197,7 @@ def createLeave(request):
                'employeeList': employeeList,
    })
 
-
+@login_required(login_url='/')
 def holyDayList(request):
     holyDayList = Holiday.objects.all()
     return render(request, 'hr_users/holidayList.html' , {

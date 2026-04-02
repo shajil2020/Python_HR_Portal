@@ -24,11 +24,19 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-    {% if error %}
-    <div class="alert alert-danger">
-        {{ error }}
-    </div>
-    {% endif %}
+      {% if messages %}
+        {% for message in messages %}
+              <div class="alert 
+                        {% if message.tags == 'error' %}
+                            alert-danger
+                        {% else %}
+                            alert-{{ message.tags }}
+                        {% endif %}
+              ">
+              {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
      <form action="{% url 'user_login' %}" method="post">
       {% csrf_token %}
         <div class="input-group mb-3">
